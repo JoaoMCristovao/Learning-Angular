@@ -1,7 +1,24 @@
-<div class="tile">
-    <div></div>
-    <div>
-    <span>{{ tileData.title }}</span>
-    <span>{{ tileData.salePrice }}/{{ tileData.normalPrice }}</span>
+<div
+  class="tile__wrapper"
+  (mouseover)="startRotation()"
+  (mouseout)="resetRotation()"
+>
+  <a href="">
+    <div class="tile">
+      <div class="tile__front" *ngIf="!showBack">
+        <div class="tile__front__title space-grotesk-regular">
+          <span>{{ tileData.title }}</span>
+        </div>
+        <div class="tile__front__pricing space-grotesk-bold">
+          <span>{{ tileData.salePrice }}</span>
+        </div>
+      </div>
+
+      <div class="tile__back" *ngIf="showBack">
+        <img [src]="tileData.thumb" />
+      </div>
+
+      <div class="tile__glow" [style.opacity]="tileData.rating"></div>
     </div>
+  </a>
 </div>

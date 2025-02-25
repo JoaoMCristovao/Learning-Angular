@@ -1,8 +1,9 @@
-import { Component, Input, OnChanges, SimpleChanges } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { Component, Input, OnChanges, SimpleChanges, HostListener } from '@angular/core';
 
 @Component({
   selector: 'app-tile',
-  imports: [],
+  imports: [CommonModule],
   templateUrl: './tile.component.html',
   styleUrl: './tile.component.scss',
 })
@@ -11,54 +12,35 @@ export class TileComponent implements OnChanges {
     title: '',
     normalPrice: '',
     salePrice: '',
-    savings: '',
+    savings: 0,
     steamRatingCount: '',
-    steamRatingPercent: '',
+    steamRatingPercent: 0,
     thumb: '',
+    rating: 0
   };
 
-  rating: number = 0;
-  ratingColor: string = '';
+  showBack: Boolean = false;
+  hovering: Boolean = true;
+
 
   ngOnChanges(changes: SimpleChanges): void {
     if (changes['tileData']?.currentValue) {
+      //this.rating = this.calculateRating(this.tileData.savings, this.tileData.steamRatingPercent)
     }
   }
 
-  calculateRating(
-    savings: number,
-    steamRatingCount: number,
-    steamRatingPercent: number
-  ): number {
-    var rating = savings;
-    rating *= steamRatingPercent * 0.01;
-    return rating;
+
+  startRotation() : void {
+    this.hovering = true;
+    setTimeout(() => {
+      if(this.hovering) this.showBack = true;
+    }, 250); // Halfway point of 500ms transition
   }
 
-  calculateColor(rating: number): string {
-    const color1 = '1f4037';
-    const color2 = '99f2c8';
-    const ratio = 0.5; // You might want to adjust this based on rating
-
-    const hex = (x: number): string => {
-      const hexValue = x.toString(16);
-      return hexValue.length === 1 ? '0' + hexValue : hexValue;
-    };
-
-    const r = Math.ceil(
-      parseInt(color1.substring(0, 2), 16) * ratio +
-        parseInt(color2.substring(0, 2), 16) * (1 - ratio)
-    );
-    const g = Math.ceil(
-      parseInt(color1.substring(2, 4), 16) * ratio +
-        parseInt(color2.substring(2, 4), 16) * (1 - ratio)
-    );
-    const b = Math.ceil(
-      parseInt(color1.substring(4, 6), 16) * ratio +
-        parseInt(color2.substring(4, 6), 16) * (1 - ratio)
-    );
-
-    const middle = hex(r) + hex(g) + hex(b);
-    return middle;
+  resetRotation() {
+    this.hovering = false;
+    setTimeout(() => {
+      if(!this.hovering) this.showBack = false;
+    }, 250); // Reset after halfway
   }
 }
